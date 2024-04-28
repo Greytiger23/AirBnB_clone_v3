@@ -37,6 +37,7 @@ class DBStorage:
                                              HBNB_MYSQL_PWD,
                                              HBNB_MYSQL_HOST,
                                              HBNB_MYSQL_DB))
+        self.connection = self.__engine.connect()
         if HBNB_ENV == "test":
             Base.metadata.drop_all(self.__engine)
 
@@ -74,24 +75,21 @@ class DBStorage:
     def close(self):
         """call remove() method on the private session attribute"""
         self.__session.remove()
+        self.connection.close()
 
     def get(self, cls, id):
         """method to retrieve one object"""
         query = "SELECT * FROM {}s WHERE id='{}'".format(cls.__name__, id)
-        self.cursor.execute(query)
-        result = self.cursor.fetchhome()
-        if result:
-            return cls.from_db_dict(result)
+        result = self.connection.execute(query)
+        row = result.fetchhone()
+        if row:
+            return cls.from_db_dict(dict(row))
         else:
             return None
 
     def count(self, cls=None):
         """count the number of objects in storage"""
         if cls is None:
-            query = "SELECT COUNT(*) FROM models"
-            self.cursor.execute(query)
-            return self.cursor.fetchone()[0]
+            return self.__session.query(BaseModel).count()
         else:
-            query = "SELECT COUNT(*) FROM {}s".format(cls.__name__)
-            self.cursor.execute(query)
-            return self.cursor.fetchone()[0]
+            return self.__session.query(cls).count()
