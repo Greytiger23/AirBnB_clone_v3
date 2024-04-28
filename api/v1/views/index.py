@@ -19,10 +19,16 @@ app_views.add_url_rule('/status', 'status', status)
 @app_views.route('/stats', methods=['GET'], strict_slashes=False)
 def get_stats():
     """displays the status"""
-    stats = {}
-    for obj_type in ['Amenity', 'City', 'Place', 'Review', 'State', 'User']:
-        stats[obj_type.lower()] = storage.count(classes[obj_type])
+    stats = {
+            'amenities': storage.count(classes['Amenity']),
+            'cities': storage.count(classes['City']),
+            'places': storage.count(classes['Place']),
+            'reviews': storage.count(classes['Review']),
+            'states': storage.count(classes['State']),
+            'users': storage.count(classes['User'])
+    }
     return jsonify(stats)
+
 
 # register the /stats route to the app_views object
 app_views.add_url_rule('/stats', 'stats', get_stats)
