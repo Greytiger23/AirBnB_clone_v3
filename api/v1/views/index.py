@@ -7,10 +7,12 @@ from models import storage
 from models.engine.db_storage import classes
 from api.v1.views import app_views
 
+
 @app_views.route('/status', methods=['GET'], strict_slashes=False)
 def status():
     """displays the status"""
     return jsonify({"status": "OK"})
+
 
 # register the /status route thr app_view object
 app_views.add_url_rule('/status', 'status', status)
