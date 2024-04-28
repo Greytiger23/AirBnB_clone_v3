@@ -3,10 +3,14 @@
 
 
 from flask import Blueprint
+from flask_cors import CORS
 
 app_views = Blueprint('app_views', __name__, url_prefix='/api/v1')
+CORS(app_views)
 
 from .index import *
+from .states import *
 
 #import app_views after defining it
-from api.v1.views import app_views
+import api.v1.views.index
+import api.v1.views.states
