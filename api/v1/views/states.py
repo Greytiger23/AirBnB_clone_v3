@@ -11,8 +11,10 @@ from api.v1.views import app_views
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 def get_states():
     """get the states"""
-    states = storage.all(State)
-    return jsonify([state.to_dict() for state in states.values()])
+    states = []
+    for state in storage.all(State).values():
+        states.append(state.to_dict())
+    return jsonify(states)
 
 
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
@@ -32,7 +34,7 @@ def delete_state(state_id):
         sbort(404)
     storage.delete(state)
     storage.save()
-    return jsonify({})
+    return jsonify({}), 200
 
 
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
@@ -59,5 +61,5 @@ def update_state(state_id):
     for key, value in request.get_json().items():
         if key not in ['id', 'created_at', 'updated_at']:
             setattr(state, key, value)
-    storage.svae()
-    return jsonify(state.to_dict())
+    storage.save()
+    return jsonify(state.to_dict()), 200

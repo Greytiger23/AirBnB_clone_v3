@@ -79,13 +79,12 @@ class DBStorage:
 
     def get(self, cls, id):
         """method to retrieve one object"""
-        query = "SELECT * FROM {}s WHERE id='{}'".format(cls.__name__, id)
-        result = self.connection.execute(query)
-        row = result.fetchhone()
-        if row:
-            return cls.from_db_dict(dict(row))
-        else:
-            return None
+        try:
+            result = self.__session.get(cls, id)
+        except sqlalchemy.exc.ResourceClosedError:
+            self.reload()
+            result = self.__session.get(cls, id)
+        return result
 
     def count(self, cls=BaseModel):
         """count the number of objects in storage"""
