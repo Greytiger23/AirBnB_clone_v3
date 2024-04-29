@@ -5,7 +5,7 @@
 from flask import request, jsonify, abort
 from models.city import City
 from models.state import State
-from models.engine.db_storage import to_dict
+from models.engine.db_storage import DBStorage
 
 
 def cities_resource(state_id=None):
