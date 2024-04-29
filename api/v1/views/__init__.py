@@ -9,8 +9,6 @@ from api.v1.views.states import states_blueprint
 from api.v1.views.cities import cities_blueprint
 
 app_views = Blueprint('app_views', __name__, url_prefix='/api/v1')
-states_blueprint = Blueprint('states', __name__)
-cities_bluerint = Blueprint('cities', __name__)
 CORS(app_views)
 
 app_views.register_blueprint(states_blueprint)

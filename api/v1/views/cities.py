@@ -2,10 +2,13 @@
 """city api file"""
 
 
-from flask import request, jsonify, abort
+from flask import request, jsonify, abort, Blueprint
 from models.city import City
-from models.state import State
 from models.engine.db_storage import DBStorage
+
+
+cities_blueprint = Blueprint('cities', __name__)
+storage = DBStorage()
 
 
 def cities_resource(state_id=None):

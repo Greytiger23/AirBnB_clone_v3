@@ -2,9 +2,13 @@
 """new view for state objects that handle all the restful api"""
 
 
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, Blueprint
 from models.state import State
 from models.engine.db_storage import DBStorage
+
+
+states_blueprint = Blueprint('states', __name__)
+storage = DBStorage()
 
 
 @states_blueprint.route('/states', methods=['GET'], strict_slashes=False)
