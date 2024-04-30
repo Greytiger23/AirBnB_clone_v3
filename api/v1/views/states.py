@@ -7,11 +7,11 @@ from models.state import State
 from models.engine.db_storage import DBStorage
 
 
-states_blueprint = Blueprint('states', __name__)
+states_b = Blueprint('states', __name__)
 storage = DBStorage()
 
 
-@states_blueprint.route('/states', methods=['GET'], strict_slashes=False)
+@states_b.route('/states', methods=['GET'])
 def get_states():
     """get the states"""
     states = []
@@ -20,8 +20,7 @@ def get_states():
     return jsonify(states)
 
 
-@states_blueprint.route(
-        '/states/<state_id>', methods=['GET'], strict_slashes=False)
+@states_b.route('/states/<state_id>', methods=['GET'])
 def get_state(state_id):
     """get the state"""
     state = storage.get(State, state_id)
@@ -30,19 +29,18 @@ def get_state(state_id):
     return jsonify(state.to_dict())
 
 
-@states_blueprint.route(
-        '/states/<state_id>', methods=['DELETE'], strict_slashes=False)
+@states_b.route('/states/<state_id>', methods=['DELETE'])
 def delete_state(state_id):
     """delete state"""
     state = storage.get(State, state_id)
     if state is None:
-        sbort(404)
+        abort(404)
     storage.delete(state)
     storage.save()
     return jsonify({}), 200
 
 
-@states_blueprint.route('/states', methods=['POST'], strict_slashes=False)
+@states_b.route('/states', methods=['POST'])
 def create_state():
     """create state"""
     if not request.get_json():
@@ -56,8 +54,7 @@ def create_state():
     return jsonify(state.to_dict()), 201
 
 
-@states_blueprint.route(
-        '/states/<state_id>', methods=['PUT'], strict_slashes=False)
+@states_b.route('/states/<state_id>', methods=['PUT'])
 def update_state(state_id):
     """updates the state"""
     state = storage.get(State, state_id)
