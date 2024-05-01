@@ -5,8 +5,8 @@
 import os
 from flask import Flask, jsonify
 from api.v1.views import app_views
-from api.v1.views.states import states_b
-from api.v1.views.cities import cities_b
+from api.v1.views.states import states as states_b
+from api.v1.views.cities import cities as cities_b
 from api.v1.views.amenities import amenities_b
 from api.v1.views.users import users_b
 from api.v1.views.places import places_b
