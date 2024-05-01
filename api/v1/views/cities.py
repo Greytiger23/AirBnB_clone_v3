@@ -9,9 +9,6 @@ from models.state import State
 from models.engine.db_storage import DBStorage
 
 
-storage = DBStorage()
-
-
 @app_views.route(
         '/states/<state_id>/cities', methods=['GET'], strict_slashes=False)
 def get_cities(state_id):
