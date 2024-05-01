@@ -5,15 +5,19 @@
 import os
 from flask import Flask, jsonify
 from api.v1.views import app_views
-from api.v1.views.states import states
-from api.v1.views.cities import cities
+from api.v1.views.states import states as states_b
+from api.v1.views.cities import cities as cities_b
+from api.v1.views.amenities import amenities as amenities_b
+from api.v1.views.users import usres as users_b
 from models import storage
 
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
-app.register_blueprint(states)
-app.register_blueprint(cities)
+app.register_blueprint(states_b)
+app.register_blueprint(cities_b)
+app.register_blueprint(amenities_b)
+app.register_blueprint(users_b)
 
 
 @app.teardown_appcontext
