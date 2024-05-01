@@ -2,11 +2,14 @@
 """city api file"""
 
 
-from flask import Flask, request, jsonify, abort, Blueprint
+from flask import abort, Blueprint, Flask, jsonify, request
 from api.v1.views import app_views
 from models.city import City
 from models.state import State
 from models.engine.db_storage import DBStorage
+
+
+cities = Blueprint('cities', __name__)
 
 
 @app_views.route(
