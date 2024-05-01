@@ -2,20 +2,20 @@
 """city api file"""
 
 
-from flask import request, jsonify, abort, Blueprint
+from flask import Flask, request, jsonify, abort, Blueprint
+from api.v1.views import app_views
 from models.city import City
 from models.state import State
 from models.engine.db_storage import DBStorage
 
 
-cities_b = Blueprint('cities', __name__)
 storage = DBStorage()
 
 
-@cities_b.route('/states/<state_id>/cities', methods=['GET'], strict_slashes=False)
+@app_views.route(
+        '/states/<state_id>/cities', methods=['GET'], strict_slashes=False)
 def get_cities(state_id):
     """handles all default restful api actions"""
-    storage = DBStorage()
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
@@ -26,7 +26,7 @@ def get_cities(state_id):
     return jsonify(cities)
 
 
-@cities_b.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
 def get_city(city_id):
     """retrieves a city object"""
     city = storage.get(City, city_id)
@@ -35,7 +35,8 @@ def get_city(city_id):
     return jsonify(city.to_dict())
 
 
-@cities_b.route('/cities/<city_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route(
+        '/cities/<city_id>', methods=['DELETE'], strict_slashes=False)
 def delete_city(city_id):
     """deletes a city object"""
     city = storage.get(City, city_id)
@@ -46,7 +47,7 @@ def delete_city(city_id):
     return jsonify({}), 200
 
 
-@cities_b.route(
+@app_views.route(
         '/states/<state_id>i/cities', methods=['POST'], strict_slashes=False)
 def post_city(state_id):
     """creates a city"""
@@ -65,7 +66,7 @@ def post_city(state_id):
     return jsonify(city.to_dict()), 201
 
 
-@cities_b.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
 def put_city(city_id):
     """updates a city object"""
     city = storage.get(City, city_id)

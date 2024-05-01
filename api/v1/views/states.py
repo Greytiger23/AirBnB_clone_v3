@@ -3,15 +3,12 @@
 
 
 from flask import jsonify, request, abort, Blueprint
+from api.v1.views import app_views
 from models.state import State
-from models.engine.db_storage import DBStorage
+from models import storage
 
 
-states_b = Blueprint('states', __name__)
-storage = DBStorage()
-
-
-@states_b.route('/states', methods=['GET'])
+@app_views.route('/states', methods=['GET'], strict_slashes=False)
 def get_states():
     """get the states"""
     states = []
@@ -20,7 +17,7 @@ def get_states():
     return jsonify(states)
 
 
-@states_b.route('/states/<state_id>', methods=['GET'])
+@app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
 def get_state(state_id):
     """get the state"""
     state = storage.get(State, state_id)
@@ -29,7 +26,8 @@ def get_state(state_id):
     return jsonify(state.to_dict())
 
 
-@states_b.route('/states/<state_id>', methods=['DELETE'])
+@app_views.route(
+        '/states/<state_id>', methods=['DELETE'], strict_slashes=False)
 def delete_state(state_id):
     """delete state"""
     state = storage.get(State, state_id)
@@ -40,7 +38,7 @@ def delete_state(state_id):
     return jsonify({}), 200
 
 
-@states_b.route('/states', methods=['POST'])
+@app_views.route('/states', methods=['POST'], strict_slashes=False)
 def create_state():
     """create state"""
     if not request.get_json():
@@ -54,7 +52,7 @@ def create_state():
     return jsonify(state.to_dict()), 201
 
 
-@states_b.route('/states/<state_id>', methods=['PUT'])
+@app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
 def update_state(state_id):
     """updates the state"""
     state = storage.get(State, state_id)
