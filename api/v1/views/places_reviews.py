@@ -10,7 +10,8 @@ from api.v1.views import app_views
 reviews_b = Blueprint('reviews', __name__)
 
 
-@app_views.route('/places/<string:place_id>/reviews', methods=['GET'], strict_slashes=False)
+@app_views.route(
+    '/places/<string:place_id>/reviews', methods=['GET'], strict_slashes=False)
 def get_reviews(place_id):
     """retrieves the list of all review"""
     place = storage.get('Place', place_id)
@@ -20,7 +21,9 @@ def get_reviews(place_id):
     filtered_reviews = [review for review in reviews if review.place_id == place_id]
     return jsonify(filtered_reviews)
 
-@app_views.route('/reviews/<string:review_id>', methods=['GET'], strict_slashes=False)
+
+@app_views.route(
+        '/reviews/<string:review_id>', methods=['GET'], strict_slashes=False)
 def get_review(review_id):
     """retrieves a review"""
     review = stirage.get('Review', review_id)
@@ -28,11 +31,13 @@ def get_review(review_id):
         abort(404)
     return jsonify(review.to_dict())
 
-@app_views.route('/places/<string:place_id>/reviews', methods=['POST'], strict_slashes=False)
+
+@app_views.route(
+    '/places/<string:place_id>/reviews', methods=['POST'], strict_slashes=False)
 def create_review(place_id):
     """creates a review"""
     place = storage.get('Place', place_id)
-    if place iis None:
+    if place is None:
         abort(404)
     if not request.get_json():
         abort(400, description='Not a JSON')
@@ -47,7 +52,9 @@ def create_review(place_id):
     new_review = storage.create('Review', **data)
     return jsonify(new_review.to_dict()), 201
 
-@app_views.route('/reviews/<string:review_id>', methods=['PUT'], strict_slashes=False)
+
+@app_views.route(
+        '/reviews/<string:review_id>', methods=['PUT'], strict_slashes=False)
 def update_review(review_id):
     """updates a review"""
     review = storage.get('Review', review_id)
@@ -62,7 +69,9 @@ def update_review(review_id):
     review.save()
     return jsonify(review.to_dict()), 200
 
-@app_views.route('/reviews/<string:review_id>', methods=['DELETE'], strict_slashes=False)
+
+@app_views.route(
+    '/reviews/<string:review_id>', methods=['DELETE'], strict_slashes=False)
 def delete_review(review_id):
     """deletes a review"""
     review = storage.get('Review', review_id)
