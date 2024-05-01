@@ -1,13 +1,13 @@
 #!/usr/bin/python3
-"""create file appp"""
+"""create a new voew for user"""
 
 
-from flask import jsonify, request, abort, Blackprint
+from flask import jsonify, request, abort, Blueprint
 from models import storage
 from api.v1.views import app_views
 
 
-users = Blackprint('users', __name__)
+users_b = Blueprint('users', __name__)
 
 
 @app_views.route('/users', methods=['GET'], strict_slashes=False)

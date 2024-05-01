@@ -1,13 +1,13 @@
 #!/usr/bin/python3
-"""create file appp"""
+"""create a new view for amenity"""
 
 
-from flask import jsonify, request, abort, Blackprint
+from flask import jsonify, request, abort, Blueprint
 from models import storage
 from api.v1.views import app_views
 
 
-amenities = Blackprint('amenities', __name__)
+amenities_b = Blueprint('amenities', __name__)
 
 
 @app_views.route('/amenities', methods=['GET'], strict_slashes=False)
