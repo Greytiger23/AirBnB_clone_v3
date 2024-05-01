@@ -2,10 +2,10 @@
 """new view for state objects that handle all the restful api"""
 
 
-from flask import jsonify, request, abort, Blueprint
+from flask import abort, Blueprint, jsonify, request
 from api.v1.views import app_views
-from models.state import State
 from models import storage
+from models.state import State
 
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
