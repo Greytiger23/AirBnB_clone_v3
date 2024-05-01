@@ -2,12 +2,10 @@
 """create a new view for amenity"""
 
 
-from flask import jsonify, request, abort, Blueprint
+from flask import jsonify, request, abort
+from models.amenity import Amenity
 from models import storage
 from api.v1.views import app_views
-
-
-amenities_b = Blueprint('amenities', __name__)
 
 
 @app_views.route('/amenities', methods=['GET'], strict_slashes=False)

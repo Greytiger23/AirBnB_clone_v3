@@ -2,12 +2,10 @@
 """create a new voew for user"""
 
 
-from flask import jsonify, request, abort, Blueprint
+from flask import jsonify, request, abort
+from models.user import User
 from models import storage
 from api.v1.views import app_views
-
-
-users_b = Blueprint('users', __name__)
 
 
 @app_views.route('/users', methods=['GET'], strict_slashes=False)

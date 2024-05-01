@@ -2,12 +2,12 @@
 """creates new views for place reviews"""
 
 
-from flask import jsonify, request, abort, Blueprint
+from flask import jsonify, request, abort
+from models.place import Place
+from models.review import Review
+from models.user import User
 from models import storage
 from api.v1.views import app_views
-
-
-reviews_b = Blueprint('reviews', __name__)
 
 
 @app_views.route(
@@ -26,7 +26,7 @@ def get_reviews(place_id):
         '/reviews/<string:review_id>', methods=['GET'], strict_slashes=False)
 def get_review(review_id):
     """retrieves a review"""
-    review = stirage.get('Review', review_id)
+    review = storage.get('Review', review_id)
     if review is None:
         abort(404)
     return jsonify(review.to_dict())

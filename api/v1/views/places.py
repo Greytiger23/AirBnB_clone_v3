@@ -2,12 +2,12 @@
 """create neww view for place"""
 
 
-from flask import jsonify, request, abort, Blueprint
+from flask import jsonify, request, abort
+from models.city import City
+from models.place import Place
+from models.user import User
 from models import storage
 from api.v1.views import app_views
-
-
-places_b = Blueprint('places', __name__)
 
 
 @app_views.route(
