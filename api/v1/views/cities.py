@@ -9,8 +9,7 @@ from models import storage
 from api.v1.views import app_views
 
 
-@app_views.route(
-        '/states/<state_id>/cities', methods=['GET'], strict_slashes=False)
+@app_views.route('/states/<state_id>/cities', methods=['GET'], strict_slashes=False)
 def get_cities(state_id):
     """handles all default restful api actions"""
     state = storage.get('State', state_id)
@@ -30,8 +29,17 @@ def get_city(city_id):
     return jsonify(city.to_dict())
 
 
-@app_views.route(
-        '/states/<state_id>i/cities', methods=['POST'], strict_slashes=False)
+@app_views.route('/cities/<city_id>', methods=['DELETE'], strict_slashes=False)
+def delete_city(city_id):
+    """deletes a city object"""
+    city = storage.get('City', city_id)
+    if city is None:
+        abort(404)
+    city.delete()
+    return jsonify({}), 200
+
+
+@app_views.route('/states/<state_id>/cities', methods=['POST'], strict_slashes=False)
 def create_city(state_id):
     """creates a city"""
     state = storage.get('State', state_id)
@@ -61,14 +69,3 @@ def update_city(city_id):
             setattr(city, key, value)
     city.save()
     return jsonify(city.to_dict()), 200
-
-
-@app_views.route(
-        '/cities/<city_id>', methods=['DELETE'], strict_slashes=False)
-def delete_city(city_id):
-    """deletes a city object"""
-    city = storage.get('City', city_id)
-    if city is None:
-        abort(404)
-    city.delete()
-    return jsonify({}), 200

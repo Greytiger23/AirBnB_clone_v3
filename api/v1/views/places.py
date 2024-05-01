@@ -10,8 +10,7 @@ from models import storage
 from api.v1.views import app_views
 
 
-@app_views.route(
-    '/cities/<string:city_id>/places', methods=['GET'], strict_slashes=False)
+@app_views.route('/cities/<city_id>/places', methods=['GET'], strict_slashes=False)
 def get_places(city_id):
     """retrieves the list of all places"""
     city = storage.get('City', city_id)
@@ -22,8 +21,7 @@ def get_places(city_id):
     return jsonify(filtered_places)
 
 
-@app_views.route(
-        '/places/<string:place_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/places/<place_id>', methods=['GET'], strict_slashes=False)
 def get_place(place_id):
     """retrieves a place object"""
     place = storage.get('Place', place_id)
@@ -32,8 +30,17 @@ def get_place(place_id):
     return jsonify(place.to_dict())
 
 
-@app_views.route(
-    '/cities/<string:city_id>/places', methods=['POST'], strict_slashes=False)
+@app_views.route('/places/<place_id>', methods=['DELETE'], strict_slashes=False)
+def delete_place(place_id):
+    """deletes a place"""
+    place = storage.get('Place', place_id)
+    if place is None:
+        abort(404)
+    place.delete()
+    return jsonify({}), 200
+
+
+@app_views.route('/cities/<city_id>/places', methods=['POST'], strict_slashes=False)
 def create_place(city_id):
     """creates a place"""
     city = storage.get('City', city_id)
@@ -52,8 +59,8 @@ def create_place(city_id):
     new_place = storage.create('Place', **data)
     return jsonify(new_place.to_dict()), 201
 
-@app_views.route(
-        '/places/<string:place_id>', methods=['PUT'], strict_slashes=False)
+
+@app_views.route('/places/<place_id>', methods=['PUT'], strict_slashes=False)
 def update_place(place_id):
     """updates a place"""
     place = storage.get('Place', place_id)
@@ -67,13 +74,3 @@ def update_place(place_id):
             setattr(place, key, value)
     place.save()
     return jsonify(place.to_dict()), 200
-
-@app_views.route(
-        '/places/<string:place_id>', methods=['DELETE'], strict_slashes=False)
-def delete_place(place_id):
-    """deletes a place"""
-    place = storage.get('Place', place_id)
-    if place is None:
-        abort(404)
-    place.delete()
-    return jsonify({}), 200
