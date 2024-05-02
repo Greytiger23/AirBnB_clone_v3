@@ -43,6 +43,8 @@ def delete_city(city_id):
                  methods=['POST'], strict_slashes=False)
 def create_city(state_id):
     """creates a city"""
+    if request.content_type != 'application/json':
+        return abort(400, 'Not a JSON')
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
@@ -60,15 +62,16 @@ def create_city(state_id):
 @app_views.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
 def update_city(city_id):
     """updates a city object"""
+    if request.content_type != 'application/json':
+        return abort(400, 'Not a JSON')
     city = storage.get(City, city_id)
     if city is None:
         abort(404)
     if not request.get_json():
         abort(400, 'Not a JSON')
     data = request.get_json()
-    ignore_keys = ['id', 'state_id', 'created_at', 'updated_at']
     for key, value in data.items():
-        if key not in ignore_keys:
+        if key not in ['id', 'state_id', 'created_at', 'updated_at']:
             setattr(city, key, value)
     city.save()
     return jsonify(city.to_dict()), 200
