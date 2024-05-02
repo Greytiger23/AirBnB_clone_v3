@@ -11,7 +11,7 @@ from api.v1.views import app_views
 @app_views.route('/amenities', strict_slashes=False)
 def get_amenities():
     """retrieves the list of all amentiy"""
-    amenities = storage.all(Amenity).items()
+    amenities = storage.all(Amenity)values()
     amenities_l = [amenity.to_dict() for amenity in amenities]
     return jsonify(amenities_l)
 
@@ -25,8 +25,8 @@ def get_amenity(amenity_id):
     return jsonify(amenity.to_dict())
 
 
-@app_views.route(
-        '/amenities/<amenity_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>',
+                 methods=['DELETE'], strict_slashes=False)
 def delete_amenity(amenity_id):
     """deletes a amenity object"""
     amenity = storage.get(Amenity, amenity_id)
@@ -52,7 +52,8 @@ def create_amenity():
     return jsonify(amenity.to_dict()), 201
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>',
+                 methods=['PUT'], strict_slashes=False)
 def update_amenity(amenity_id):
     """updates a amenity"""
     if request.content_type != 'application/json':
