@@ -11,8 +11,9 @@ from api.v1.views import app_views
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 def get_states():
     """get the states"""
-    states = [state.to_dict() for state in storage.all(State).values()]
-    return jsonify(states)
+    states = storage.all(State).values()
+    states_l = [state.to_dict() for state in states]
+    return jsonify(states_l)
 
 
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
@@ -41,12 +42,11 @@ def create_state():
     """create state"""
     if not request.get_json():
         abort(400, 'Not a JSON')
-    if 'name' not in request.get_json():
-        abort(400, 'Misssing name')
     data = request.get_json()
+    if 'name' not in data:
+        abort(400, 'Misssing name')
     state = State(**data)
-    storage.new(state)
-    storage.save()
+    state.save()
     return jsonify(state.to_dict()), 201
 
 
@@ -62,5 +62,5 @@ def update_state(state_id):
     for key, value in data.items():
         if key not in ['id', 'created_at', 'updated_at']:
             setattr(state, key, value)
-    storage.save()
+    state.save()
     return jsonify(state.to_dict()), 200
