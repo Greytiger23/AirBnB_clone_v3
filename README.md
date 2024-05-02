@@ -61,6 +61,21 @@ Classes inherited from Base Model:
 * `def save(self)` - serializes __objects to the JSON file (path: __file_path)
 * ` def reload(self)` -  deserializes the JSON file to __objects
 
+#### `RESTful API`
+0. restart from scratch
+1. never fail! test the unittests
+2. improve storage
+3. status of your api
+4. some stats
+5. not found page
+6. state
+7. city
+8. amenity
+9. user
+10. place
+11. place reviews
+12. http access control(CORS)
+
 #### `/tests` directory contains all unit test cases for this project:
 [/test_models/test_base_model.py](/tests/test_models/test_base_model.py) - Contains the TestBaseModel and TestBaseModelDocs classes
 TestBaseModelDocs class:
@@ -151,11 +166,12 @@ EOF  all  create  destroy  help  quit  show  update
 ```
 
 ## Bugs
-No known bugs at this time. 
+No known bugs at this time.
 
 ## Authors
 Alexa Orrico - [Github](https://github.com/alexaorrico) / [Twitter](https://twitter.com/alexa_orrico)  
 Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://twitter.com/earthtojhuang)
+Isabel Mothoa - [Github] (https://github.com/greytiger23)
 
 Second part of Airbnb: Joann Vuong
 ## License
