@@ -9,8 +9,7 @@ from models import storage
 from api.v1.views import app_views
 
 
-@app_views.route(
-        '/states/<state_id>/cities', methods=['GET'], strict_slashes=False)
+@app_views.route('/states/<state_id>/cities', strict_slashes=False)
 def get_cities(state_id):
     """handles all default restful api actions"""
     state = storage.get(State, state_id)
@@ -20,7 +19,7 @@ def get_cities(state_id):
     return jsonify(cities)
 
 
-@app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/cities/<city_id>', strict_slashes=False)
 def get_city(city_id):
     """retrieves a city object"""
     city = storage.get(City, city_id)
@@ -40,8 +39,8 @@ def delete_city(city_id):
     return jsonify({}), 200
 
 
-@app_views.route(
-        '/states/<state_id>/cities', methods=['POST'], strict_slashes=False)
+@app_views.route('/states/<state_id>/cities',
+                 methods=['POST'], strict_slashes=False)
 def create_city(state_id):
     """creates a city"""
     state = storage.get(State, state_id)
@@ -67,8 +66,9 @@ def update_city(city_id):
     if not request.get_json():
         abort(400, 'Not a JSON')
     data = request.get_json()
+    ignore_keys = ['id', 'state_id', 'created_at', 'updated_at']
     for key, value in data.items():
-        if key not in ['id', 'state_id', 'created_at', 'updated_at']:
+        if key not in ignore_keys:
             setattr(city, key, value)
     city.save()
     return jsonify(city.to_dict()), 200
