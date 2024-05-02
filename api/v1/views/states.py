@@ -1,7 +1,6 @@
 #!/usr/bin/pyhton3
 """new view for state objects that handle all the restful api"""
 
-
 from flask import jsonify, request, abort
 from models.state import State
 from models import storage
