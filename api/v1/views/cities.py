@@ -2,7 +2,7 @@
 """city api file"""
 
 
-from flask import jsonify, request, abort
+from flask import jsonify, abort, request
 from models.state import State
 from models.city import City
 from models import storage
