@@ -1,4 +1,4 @@
-#!/usr/bin/pyhton3
+#!/usr/bin/python3
 """new view for state objects that handle all the restful api"""
 
 
