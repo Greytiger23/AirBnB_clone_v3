@@ -11,8 +11,9 @@ from api.v1.views import app_views
 @app_views.route('/amenities', methods=['GET'], strict_slashes=False)
 def get_amenities():
     """retrieves the list of all amentiy"""
-    amenities = storage.all(Amenity).values()
-    return jsonify([amenity.to_dict() for amenity in amenities])
+    amenities = [amenity.to_dict() for amenity
+            in storage.all(Amenity).values()]
+    return jsonify(amenities)
 
 
 @app_views.route(
@@ -42,9 +43,9 @@ def create_amenity():
     """creates a amenity"""
     if not request.get_json():
         abort(400, "Not a JSON")
-    data = request.get_json()
-    if 'name' not in data:
+    if 'name' not in request.get_json():
         abort(400, "Missing name")
+    data = request.get_json()
     amenity = Amenity(**data)
     storage.new(amenity)
     storage.save()
