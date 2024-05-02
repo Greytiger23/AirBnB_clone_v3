@@ -9,7 +9,8 @@ from models import storage
 from api.v1.views import app_views
 
 
-@app_views.route('/states/<state_id>/cities', methods=['GET'], strict_slashes=False)
+@app_views.route(
+        '/states/<state_id>/cities', methods=['GET'], strict_slashes=False)
 def get_cities(state_id):
     """handles all default restful api actions"""
     state = storage.get(State, state_id)
@@ -39,7 +40,8 @@ def delete_city(city_id):
     return jsonify({}), 200
 
 
-@app_views.route('/states/<state_id>/cities', methods=['POST'], strict_slashes=False)
+@app_views.route(
+        '/states/<state_id>/cities', methods=['POST'], strict_slashes=False)
 def create_city(state_id):
     """creates a city"""
     state = storage.get(State, state_id)

@@ -15,7 +15,8 @@ def get_amenities():
     return jsonify([amenity.to_dict() for amenity in amenities])
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['GET'], strict_slashes=False)
+@app_views.route(
+        '/amenities/<amenity_id>', methods=['GET'], strict_slashes=False)
 def get_amenity(amenity_id):
     """retrieves a amenity object"""
     amenity = storage.get(Amenity, amenity_id)
@@ -24,13 +25,15 @@ def get_amenity(amenity_id):
     return jsonify(amenity.to_dict())
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route(
+        '/amenities/<amenity_id>', methods=['DELETE'], strict_slashes=False)
 def delete_amenity(amenity_id):
     """deletes a amenity object"""
     amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
-    amenity.delete()
+    storage.delete(amenity)
+    storage.save()
     return jsonify({}), 200
 
 
@@ -38,25 +41,28 @@ def delete_amenity(amenity_id):
 def create_amenity():
     """creates a amenity"""
     if not request.get_json():
-        abort(400, description="Not a JSON")
+        abort(400, "Not a JSON")
     data = request.get_json()
     if 'name' not in data:
-        abort(400, description="Missing name")
-    new_amenity = storage.create(Amenity, **data)
-    return jsonify(new_amenity.to_dict()), 201
+        abort(400, "Missing name")
+    amenity = Amenity(**data)
+    storage.new(amenity)
+    storage.save()
+    return jsonify(amenity.to_dict()), 201
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route(
+        '/amenities/<amenity_id>', methods=['PUT'], strict_slashes=False)
 def update_amenity(amenity_id):
     """updates a amenity"""
     amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
     if not request.get_json():
-        abort(400, description="Not a JSON")
+        abort(400, "Not a JSON")
     data = request.get_json()
     for key, value in data.items():
         if key not in ['id', 'created_at', 'updated_at']:
             setattr(amenity, key, value)
-    amenity.save()
+    storage.save()
     return jsonify(amenity.to_dict()), 200
