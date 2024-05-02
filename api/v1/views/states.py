@@ -2,21 +2,20 @@
 """new view for state objects that handle all the restful api"""
 
 
-from flask import jsonify, request, abort
+from flask import jsonify, abort, request
 from models.state import State
 from models import storage
 from api.v1.views import app_views
 
 
-@app_views.route('/states', methods=['GET'], strict_slashes=False)
+@app_views.route('/states', strict_slashes=False)
 def get_states():
     """get the states"""
-    states = storage.all(State).values()
-    states_l = [state.to_dict() for state in states]
-    return jsonify(states_l)
+    states = [state.to_dict() for state in storage.all(State).values()]
+    return jsonify(states)
 
 
-@app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/states/<state_id>', strict_slashes=False)
 def get_state(state_id):
     """get the state"""
     state = storage.get(State, state_id)
@@ -25,8 +24,8 @@ def get_state(state_id):
     return jsonify(state.to_dict())
 
 
-@app_views.route(
-        '/states/<state_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/states/<state_id>',
+                 methods=['DELETE'], strict_slashes=False)
 def delete_state(state_id):
     """delete state"""
     state = storage.get(State, state_id)
