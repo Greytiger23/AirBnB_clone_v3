@@ -1,5 +1,7 @@
 #!/usr/bin/pyhton3
 """new view for state objects that handle all the restful api"""
+
+
 from flask import jsonify, request, abort
 from models.state import State
 from models import storage
@@ -9,14 +11,14 @@ from api.v1.views import app_views
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 def get_states():
     """get the states"""
-    all_states = storage.all('State').values()
-    return jsonify([state.to_dict() for state in all_states])
+    states = storage.all(State).values()
+    return jsonify([state.to_dict() for state in states])
 
 
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
 def get_state(state_id):
     """get the state"""
-    state = storage.get('State', state_id)
+    state = storage.get(State, state_id)
     if state is None:
         abort(404)
     return jsonify(state.to_dict())
@@ -25,22 +27,23 @@ def get_state(state_id):
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
 def create_state():
     """create state"""
-    if not request.get_json():
+    if not request.json:
         abort(400, description='Not a JSON')
-    data = request.get_json()
-    if 'name' not in data:
+    if 'name' not in request.json:
         abort(400, description='Misssing name')
-    new_state = storage.create('State', **data)
-    return jsonify(new_state.to_dict()), 201
+    data = request.get_json()
+    state = State(**data)
+    state.save()
+    return jsonify(state.to_dict()), 201
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
 def update_state(state_id):
     """updates the state"""
-    state = storage.get('State', state_id)
+    state = storage.get(State, state_id)
     if state is None:
         abort(404)
-    if not request.get_json():
+    if not request.json:
         abort(400, description='Not a JSON')
     data = request.get_json()
     for key, value in data.items():
@@ -54,8 +57,9 @@ def update_state(state_id):
         '/states/<state_id>', methods=['DELETE'], strict_slashes=False)
 def delete_state(state_id):
     """delete state"""
-    state = storage.get('State', state_id)
+    state = storage.get(State, state_id)
     if state is None:
         abort(404)
     state.delete()
+    storage.save()
     return jsonify({}), 200
