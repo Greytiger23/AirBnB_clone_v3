@@ -11,8 +11,8 @@ from api.v1.views import app_views
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
 def get_users():
     """retrieves the list of all users"""
-    users = [user.to_dict() for user in storage.all(User)]
-    return jsonify(users)
+    users = storage.all(User)
+    return jsonify([user.to_dict() for user in users])
 
 
 @app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
@@ -56,7 +56,7 @@ def create_user():
 def update_user(user_id):
     """updates a user"""
     if request.content_type != 'application/json':
-        return abort(400, 'Not a JSON')
+        return abort(404, 'Not a JSON')
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
