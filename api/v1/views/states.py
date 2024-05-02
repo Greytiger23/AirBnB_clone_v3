@@ -1,6 +1,7 @@
 #!/usr/bin/pyhton3
 """new view for state objects that handle all the restful api"""
 
+
 from flask import jsonify, request, abort
 from models.state import State
 from models import storage
@@ -27,12 +28,13 @@ def get_state(state_id):
 def create_state():
     """create state"""
     if not request.json:
-        abort(400, description='Not a JSON')
+        abort(400, 'Not a JSON')
     if 'name' not in request.json:
-        abort(400, description='Misssing name')
+        abort(400, 'Misssing name')
     data = request.get_json()
     state = State(**data)
-    state.save()
+    storage.new(state)
+    storage.save()
     return jsonify(state.to_dict()), 201
 
 
@@ -43,12 +45,12 @@ def update_state(state_id):
     if state is None:
         abort(404)
     if not request.json:
-        abort(400, description='Not a JSON')
+        abort(400, 'Not a JSON')
     data = request.get_json()
     for key, value in data.items():
         if key not in ['id', 'created_at', 'updated_at']:
             setattr(state, key, value)
-    state.save()
+    storage.save()
     return jsonify(state.to_dict()), 200
 
 
@@ -59,6 +61,6 @@ def delete_state(state_id):
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
-    state.delete()
+    storage.delete(state)
     storage.save()
     return jsonify({}), 200
