@@ -24,11 +24,11 @@ def get_state(state_id):
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
 def create_state():
     """create state"""
-    if not request.json:
+    if not request.get_json():
         abort(400, "Not a JSON")
-    if 'name' not in request.json:
+    if 'name' not in request.get_json():
         abort(400, "Misssing name")
-    data = request.json()
+    data = request.get_json()
     state = State(**data)
     storage.new(state)
     storage.save()
@@ -40,7 +40,7 @@ def update_state(state_id):
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
-    if not request.json:
+    if not request.get_json():
         abort(400, "Not a JSON")
     data = request.get_json()
     for key, value in data.items():
