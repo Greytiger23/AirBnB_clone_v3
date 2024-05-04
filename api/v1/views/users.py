@@ -8,14 +8,14 @@ from models import storage
 from api.v1.views import app_views
 
 
-@app_views.route('/users', strict_slashes=False)
+@app_views.route('/users', methods=['GET'], strict_slashes=False)
 def get_users():
     """retrieves the list of all users"""
     users = storage.all(User).values()
     return jsonify([user.to_dict() for user in users])
 
 
-@app_views.route('/users/<user_id>', strict_slashes=False)
+@app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
 def get_user(user_id):
     """retrieves a user object"""
     user = storage.get(User, user_id)
@@ -40,7 +40,7 @@ def delete_user(user_id):
 def create_user():
     """creates a user"""
     if request.content_type != 'application/json':
-        return abort(400, 'Not a JSON')
+        abort(400, 'Not a JSON')
     data = request.get_json()
     if not data:
         abort(400, 'Not a JSON')
@@ -56,11 +56,11 @@ def create_user():
 @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
 def update_user(user_id):
     """updates a user"""
+     if request.content_type != 'application/json':
+        return abort(400, 'Not a JSON')
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
-     if request.content_type != 'application/json':
-        return abort(400, 'Not a JSON')
     data = request.get_json()
     if not data:
         abort(400, 'Not a JSON')
