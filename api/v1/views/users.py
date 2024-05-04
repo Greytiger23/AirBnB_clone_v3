@@ -19,10 +19,9 @@ def get_users():
 def get_user(user_id):
     """retrieves a user object"""
     user = storage.get(User, user_id)
-    if user:
-        return jsonify(user.to_dict())
-    else:
+    if user is None:
         abort(404)
+    return jsonify(user.to_dict()), 200
 
 
 @app_views.route('/users/<user_id>',
@@ -57,11 +56,11 @@ def create_user():
 @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
 def update_user(user_id):
     """updates a user"""
-    if request.content_type != 'application/json':
-        return abort(400, 'Not a JSON')
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
+     if request.content_type != 'application/json':
+        abort(400, 'Not a JSON')
     data = request.get_json()
     if not data:
         abort(400, 'Not a JSON')
