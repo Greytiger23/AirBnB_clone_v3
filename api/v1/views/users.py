@@ -40,7 +40,7 @@ def delete_user(user_id):
 def create_user():
     """creates a user"""
     if request.content_type != 'application/json':
-        abort(400, 'Not a JSON')
+        return abort(400, 'Not a JSON')
     data = request.get_json()
     if not data:
         abort(400, 'Not a JSON')
@@ -60,7 +60,7 @@ def update_user(user_id):
     if user is None:
         abort(404)
      if request.content_type != 'application/json':
-        abort(400, 'Not a JSON')
+        return abort(400, 'Not a JSON')
     data = request.get_json()
     if not data:
         abort(400, 'Not a JSON')
