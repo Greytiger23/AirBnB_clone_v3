@@ -16,8 +16,10 @@ def get_places(city_id):
     city = storage.get(City, city_id)
     if city is None:
         abort(404)
-    places = [place.to_dict() for place in city.places]
-    return jsonify(places)
+    places = city.places
+    if not places:
+        return jsonify([])
+    return jsonify([place.to_dict() for place in places])
 
 
 @app_views.route('/places/<place_id>', strict_slashes=False)
@@ -48,8 +50,6 @@ def create_place(city_id):
     city = storage.get(City, city_id)
     if city is None:
         abort(404)
-    if request.content_type != 'application/json':
-        abort(400, 'Not a JSON')
     if not request.get_json():
         abort(400, 'Not a JSON')
     data = request.get_json()
@@ -72,8 +72,6 @@ def update_place(place_id):
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
-    if request.content_type != 'application/json':
-        abort(400, 'Not a JSON')
     data = request.get_json()
     if not data:
         abort(400, 'Not a JSON')
