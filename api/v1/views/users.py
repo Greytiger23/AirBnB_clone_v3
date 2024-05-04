@@ -19,9 +19,10 @@ def get_users():
 def get_user(user_id):
     """retrieves a user object"""
     user = storage.get(User, user_id)
-    if user is None:
+    if user:
+        return jsonify(user.to_dict())
+    else:
         abort(404)
-    return jsonify(user.to_dict())
 
 
 @app_views.route('/users/<user_id>',
