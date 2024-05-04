@@ -56,7 +56,7 @@ def create_user():
 @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
 def update_user(user_id):
     """updates a user"""
-     if request.content_type != 'application/json':
+    if request.content_type != 'application/json':
         return abort(400, 'Not a JSON')
     user = storage.get(User, user_id)
     if user is None:
