@@ -21,7 +21,7 @@ def get_user(user_id):
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
-    return jsonify(user.to_dict())
+    return jsonify(user.to_dict()), 200
 
 
 @app_views.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
@@ -39,7 +39,7 @@ def delete_user(user_id):
 def create_user():
     """creates a user"""
     if request.content_type != 'application/json':
-        return abort(400, 'Not a JSON')
+        abort(400, 'Not a JSON')
     if not request.get_json():
         abort(400, 'Not a JSON')
     data = request.get_json()
