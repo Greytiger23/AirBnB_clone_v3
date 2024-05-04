@@ -8,23 +8,24 @@ from models import storage
 from api.v1.views import app_views
 
 
-@app_views.route('/users', methods=['GET'], strict_slashes=False)
+@app_views.route('/users', strict_slashes=False)
 def get_users():
     """retrieves the list of all users"""
     users = storage.all(User).values()
     return jsonify([user.to_dict() for user in users])
 
 
-@app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/users/<user_id>', strict_slashes=False)
 def get_user(user_id):
     """retrieves a user object"""
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
-    return jsonify(user.to_dict()), 200
+    return jsonify(user.to_dict())
 
 
-@app_views.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/users/<user_id>',
+                 methods=['DELETE'], strict_slashes=False)
 def delete_user(user_id):
     """deletes a user object"""
     user = storage.get(User, user_id)
