@@ -41,7 +41,7 @@ def delete_amenity(amenity_id):
 def create_amenity():
     """creates a amenity"""
     if request.content_type != 'application/json':
-        return abort(404, 'Not a JSON')
+        abort(400, 'Not a JSON')
     if not request.get_json():
         abort(400, 'Not a JSON')
     data = request.get_json()
