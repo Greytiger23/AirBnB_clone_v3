@@ -93,7 +93,7 @@ class TestDBStorageMethods(unittest.TestCase):
 
     def setUp(self):
         """set up the test environment"""
-        self.db_storage = DBStorage(hibernate=False)
+        self.db_storage = DBStorage()
 
     def test_get_methods(self):
         """test the get method"""
