@@ -39,8 +39,6 @@ def delete_user(user_id):
 @app_views.route('/users', methods=['POST'], strict_slashes=False)
 def create_user():
     """creates a user"""
-    if request.content_type != 'application/json':
-        abort(400, 'Not a JSON')
     data = request.get_json()
     if not data:
         abort(400, 'Not a JSON')
@@ -59,8 +57,6 @@ def update_user(user_id):
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
-    if request.content_type != 'application/json':
-        abort(400, 'Not a JSON')
     data = request.get_json()
     if not data:
         abort(400, 'Not a JSON')
